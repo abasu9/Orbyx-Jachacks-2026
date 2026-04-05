@@ -330,7 +330,10 @@ export default function Analytics() {
         <div className="modal-overlay" onClick={() => setReport(null)}>
           <div className="modal-card" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>{report.name} — Evaluation Report</h3>
+              <div className="modal-title-group">
+                <h3>{report.name}</h3>
+                <span className="modal-subtitle">AI Evaluation Report</span>
+              </div>
               <button className="modal-close" onClick={() => setReport(null)}>✕</button>
             </div>
             <div className="modal-body">
@@ -338,79 +341,115 @@ export default function Analytics() {
                 <div className="an-error">{report.error}</div>
               ) : report.evaluation ? (
                 <>
-                  <section className="rpt-section">
-                    <h4>Summary</h4>
+                  {/* Summary banner */}
+                  <div className="rpt-summary-card">
                     <p>{report.evaluation.summary}</p>
-                  </section>
-
-                  <section className="rpt-section">
-                    <h4>Impact Assessment</h4>
-                    <span className={`rpt-badge rpt-${report.evaluation.impact_assessment?.level}`}>
-                      {report.evaluation.impact_assessment?.level}
-                    </span>
-                    <p>{report.evaluation.impact_assessment?.justification}</p>
-                  </section>
-
-                  <section className="rpt-section">
-                    <h4>Code Quality</h4>
-                    <p>{report.evaluation.code_quality_signals?.assessment}</p>
-                    {report.evaluation.code_quality_signals?.risk_flags?.length > 0 && (
-                      <ul className="rpt-list">
-                        {report.evaluation.code_quality_signals.risk_flags.map((f, i) => <li key={i}>{f}</li>)}
-                      </ul>
-                    )}
-                  </section>
-
-                  <section className="rpt-section">
-                    <h4>Collaboration</h4>
-                    <span className={`rpt-badge rpt-${report.evaluation.collaboration?.review_strength}`}>
-                      {report.evaluation.collaboration?.review_strength}
-                    </span>
-                    <p>{report.evaluation.collaboration?.assessment}</p>
-                  </section>
-
-                  <section className="rpt-section">
-                    <h4>Consistency</h4>
-                    <span className="rpt-badge rpt-neutral">{report.evaluation.consistency?.pattern}</span>
-                    <p>{report.evaluation.consistency?.assessment}</p>
-                  </section>
-
-                  <section className="rpt-section">
-                    <h4>Seniority Signal</h4>
-                    <span className="rpt-badge rpt-neutral">
-                      {report.evaluation.seniority_signal?.level}
-                      {report.evaluation.seniority_signal?.confidence != null &&
-                        ` (${(report.evaluation.seniority_signal.confidence * 100).toFixed(0)}% confidence)`}
-                    </span>
-                  </section>
-
-                  <div className="rpt-cols">
-                    <section className="rpt-section">
-                      <h4>Strengths</h4>
-                      <ul className="rpt-list rpt-strengths">
-                        {(report.evaluation.strengths || []).map((s, i) => <li key={i}>{s}</li>)}
-                      </ul>
-                    </section>
-                    <section className="rpt-section">
-                      <h4>Weaknesses</h4>
-                      <ul className="rpt-list rpt-weaknesses">
-                        {(report.evaluation.weaknesses || []).map((w, i) => <li key={i}>{w}</li>)}
-                      </ul>
-                    </section>
                   </div>
 
+                  {/* Two-column dimension cards */}
+                  <div className="rpt-grid-2">
+                    <div className="rpt-card">
+                      <div className="rpt-card-head">
+                        <span className="rpt-icon">📊</span>
+                        <h4>Impact</h4>
+                        <span className={`rpt-badge rpt-${report.evaluation.impact_assessment?.level}`}>
+                          {report.evaluation.impact_assessment?.level}
+                        </span>
+                      </div>
+                      <p>{report.evaluation.impact_assessment?.justification}</p>
+                    </div>
+
+                    <div className="rpt-card">
+                      <div className="rpt-card-head">
+                        <span className="rpt-icon">🔍</span>
+                        <h4>Code Quality</h4>
+                      </div>
+                      <p>{report.evaluation.code_quality_signals?.assessment}</p>
+                      {report.evaluation.code_quality_signals?.risk_flags?.length > 0 && (
+                        <div className="rpt-flags">
+                          {report.evaluation.code_quality_signals.risk_flags.map((f, i) => (
+                            <span key={i} className="rpt-flag">⚠ {f}</span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="rpt-card">
+                      <div className="rpt-card-head">
+                        <span className="rpt-icon">🤝</span>
+                        <h4>Collaboration</h4>
+                        <span className={`rpt-badge rpt-${report.evaluation.collaboration?.review_strength}`}>
+                          {report.evaluation.collaboration?.review_strength}
+                        </span>
+                      </div>
+                      <p>{report.evaluation.collaboration?.assessment}</p>
+                    </div>
+
+                    <div className="rpt-card">
+                      <div className="rpt-card-head">
+                        <span className="rpt-icon">📈</span>
+                        <h4>Consistency</h4>
+                        <span className="rpt-badge rpt-neutral">
+                          {report.evaluation.consistency?.pattern?.replace(/_/g, ' ')}
+                        </span>
+                      </div>
+                      <p>{report.evaluation.consistency?.assessment}</p>
+                    </div>
+                  </div>
+
+                  {/* Seniority signal — full width */}
+                  <div className="rpt-card rpt-card-full">
+                    <div className="rpt-card-head">
+                      <span className="rpt-icon">🎯</span>
+                      <h4>Seniority Signal</h4>
+                      <span className="rpt-badge rpt-neutral">
+                        {report.evaluation.seniority_signal?.level}
+                      </span>
+                      {report.evaluation.seniority_signal?.confidence != null && (
+                        <span className="rpt-confidence">
+                          {(report.evaluation.seniority_signal.confidence * 100).toFixed(0)}% confidence
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Strengths & Weaknesses */}
+                  <div className="rpt-grid-2 rpt-sw">
+                    <div className="rpt-card rpt-card-strengths">
+                      <h4>✅ Strengths</h4>
+                      <ul>
+                        {(report.evaluation.strengths || []).map((s, i) => <li key={i}>{s}</li>)}
+                      </ul>
+                    </div>
+                    <div className="rpt-card rpt-card-weaknesses">
+                      <h4>⚠️ Weaknesses</h4>
+                      <ul>
+                        {(report.evaluation.weaknesses || []).map((w, i) => <li key={i}>{w}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* GitHub Metrics */}
                   {report.github_metrics && (
-                    <section className="rpt-section rpt-metrics">
-                      <h4>GitHub Metrics</h4>
+                    <div className="rpt-metrics-section">
+                      <h4>GitHub Activity Metrics</h4>
                       <div className="rpt-metric-grid">
                         {Object.entries(report.github_metrics).map(([k, v]) => (
                           <div key={k} className="rpt-metric">
                             <span className="rpt-metric-label">{k.replace(/_/g, ' ')}</span>
-                            <span className="rpt-metric-value">{Array.isArray(v) ? v.join(', ') : v}</span>
+                            <span className="rpt-metric-value">
+                              {Array.isArray(v) ? (v.length > 0 ? v.join(', ') : '—') : v}
+                            </span>
                           </div>
                         ))}
                       </div>
-                    </section>
+                    </div>
+                  )}
+
+                  {report.generated_at && (
+                    <div className="rpt-footer">
+                      Generated {new Date(report.generated_at).toLocaleString()}
+                    </div>
                   )}
                 </>
               ) : (

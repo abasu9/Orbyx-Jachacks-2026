@@ -277,8 +277,8 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -287,138 +287,257 @@
 }
 
 .modal-card {
-  background: var(--bg-card);
+  background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   width: 100%;
-  max-width: 680px;
-  max-height: 80vh;
+  max-width: 760px;
+  max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
 }
 
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 24px;
+  padding: 20px 28px;
   border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
 }
 
-.modal-header h3 {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: color 0.2s;
-}
-
-.modal-close:hover {
-  color: var(--text);
-}
-
-.modal-body {
-  padding: 20px 24px;
-  overflow-y: auto;
-}
-
-/* Report sections */
-.rpt-section {
-  margin-bottom: 18px;
-}
-
-.rpt-section h4 {
-  margin: 0 0 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.rpt-section p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.5;
-}
-
-.rpt-badge {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  padding: 2px 10px;
-  border-radius: 10px;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
-}
-
-.rpt-high { background: rgba(34,197,94,0.15); color: #4ade80; }
-.rpt-medium { background: rgba(250,204,21,0.15); color: #facc15; }
-.rpt-low { background: rgba(239,68,68,0.15); color: #f87171; }
-.rpt-neutral { background: rgba(161,161,170,0.12); color: #a1a1aa; }
-
-.rpt-list {
-  margin: 6px 0 0;
-  padding-left: 18px;
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.6;
-}
-
-.rpt-strengths li::marker { color: #4ade80; }
-.rpt-weaknesses li::marker { color: #f87171; }
-
-.rpt-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-/* Metrics grid */
-.rpt-metrics {
-  margin-top: 8px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-}
-
-.rpt-metric-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.rpt-metric {
-  background: var(--bg-input);
-  border-radius: 8px;
-  padding: 10px 12px;
+.modal-title-group {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.rpt-metric-label {
-  font-size: 10px;
+.modal-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+.modal-close {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.modal-body {
+  padding: 24px 28px;
+  overflow-y: auto;
+}
+
+/* Summary banner */
+.rpt-summary-card {
+  background: linear-gradient(135deg, rgba(238, 79, 53, 0.06), rgba(238, 79, 53, 0.02));
+  border: 1px solid rgba(238, 79, 53, 0.15);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.rpt-summary-card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+/* Card grid */
+.rpt-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rpt-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.rpt-card-full {
+  margin-bottom: 12px;
+}
+
+.rpt-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.rpt-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.rpt-card-head h4 {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+}
+
+.rpt-card p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.55;
   color: var(--text-muted);
 }
 
-.rpt-metric-value {
-  font-size: 15px;
+.rpt-confidence {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+/* Badges */
+.rpt-badge {
+  display: inline-flex;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.6px;
+  line-height: 1;
+  align-items: center;
+}
+
+.rpt-high { background: rgba(34, 197, 94, 0.12); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
+.rpt-medium { background: rgba(250, 204, 21, 0.12); color: #facc15; border: 1px solid rgba(250, 204, 21, 0.2); }
+.rpt-low { background: rgba(239, 68, 68, 0.12); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+.rpt-neutral { background: rgba(161, 161, 170, 0.10); color: #a1a1aa; border: 1px solid rgba(161, 161, 170, 0.15); }
+
+/* Risk flags */
+.rpt-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.rpt-flag {
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  padding: 3px 10px;
+  border-radius: 6px;
+}
+
+/* Strengths & Weaknesses */
+.rpt-sw {
+  margin-bottom: 16px;
+}
+
+.rpt-card-strengths h4,
+.rpt-card-weaknesses h4 {
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.rpt-card-strengths h4 { color: #4ade80; }
+.rpt-card-weaknesses h4 { color: #f87171; }
+
+.rpt-card-strengths ul,
+.rpt-card-weaknesses ul {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+.rpt-card-strengths li::marker { color: #4ade80; }
+.rpt-card-weaknesses li::marker { color: #f87171; }
+
+/* GitHub Metrics */
+.rpt-metrics-section {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-bottom: 12px;
+}
+
+.rpt-metrics-section h4 {
+  margin: 0 0 12px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.rpt-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.rpt-metric {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rpt-metric-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.rpt-metric-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Footer */
+.rpt-footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
 }
