@@ -1,23 +1,76 @@
 """
 Orchestrator
-Runs the 4-agent pipeline per-user sequentially:
+Runs the 4-agent pipeline with concurrent workers:
 
-For each employee:
-  1. (Data already fetched in bulk by data_agent)
-  2. Math Agent   → compute ranking (0-1)
-  3. GitHub Agent → collect GitHub data, AI score, calculate ROI
-  4. Update Agent → persist ranking + roi to DB (waits for success)
-
-Only moves to the next employee after the DB write succeeds.
+  1. Data Agent   → bulk-fetch all employees
+  2. ThreadPool   → per-employee: Math → GitHub+AI → Update DB
+     Each thread operates on its own employee dict (no shared mutable state).
+     Thread-safe counters use threading.Lock.
+     On DB-write failure the employee's ranking/roi are NOT committed,
+     so a partial run is safe to re-run.
 """
 
 import logging
+import threading
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Dict, List
 
 from agents import data_agent, math_agent, github_agent, update_agent
 
 logger = logging.getLogger(__name__)
+
+MAX_WORKERS = 10  # stay well within GitHub's secondary rate-limit
+
+
+def _process_employee(emp: Dict[str, Any], index: int, total: int) -> Dict[str, Any]:
+    """Run math → github → update for a single employee. Returns a summary dict.
+    Each invocation works on its own `emp` dict — no shared state."""
+    name = emp.get("name", "Unknown")
+    logger.info("── [%d/%d] Processing: %s ──", index, total, name)
+
+    # Snapshot original values so we can revert on error
+    orig_ranking = emp.get("ranking")
+    orig_roi = emp.get("roi")
+    orig_github_score = emp.get("github_score")
+    orig_report_id = emp.get("report_id")
+
+    try:
+        # Step 2: Math Agent — pure computation, no I/O
+        math_agent.compute_ranking(emp)
+
+        # Step 3: GitHub Agent — HTTP + LLM (I/O-bound, benefits from threading)
+        github_agent.run(emp)
+
+        # Step 4: Update Agent — persist to DB
+        update_agent.run(emp)
+
+        logger.info("  ✓ %s done (ranking=%.4f, roi=%.4f)",
+                     name, emp.get("ranking", 0), emp.get("roi", 0))
+        return {
+            "id": emp.get("id"),
+            "name": name,
+            "ranking": emp.get("ranking"),
+            "roi": emp.get("roi"),
+            "github_score": emp.get("github_score"),
+            "status": "success",
+        }
+
+    except Exception as exc:
+        # Revert in-memory values so the dict stays clean
+        emp["ranking"] = orig_ranking
+        emp["roi"] = orig_roi
+        emp["github_score"] = orig_github_score
+        emp["report_id"] = orig_report_id
+        logger.error("  ✗ %s FAILED (reverted): %s", name, exc)
+        return {
+            "id": emp.get("id"),
+            "name": name,
+            "ranking": None,
+            "roi": None,
+            "github_score": None,
+            "status": f"failed: {exc}",
+        }
 
 
 def run_pipeline() -> Dict[str, Any]:
@@ -42,49 +95,29 @@ def run_pipeline() -> Dict[str, Any]:
         results["status"] = "empty"
         return results
 
-    logger.info("═══ Processing %d employees one-by-one ═══", len(employees))
+    logger.info("═══ Processing %d employees with %d workers ═══",
+                len(employees), MAX_WORKERS)
 
-    # ── Process each employee sequentially ───────────────────────────────
-    for i, emp in enumerate(employees, 1):
-        name = emp.get("name", "Unknown")
-        logger.info("── [%d/%d] Processing: %s ──", i, len(employees), name)
+    # ── Step 2-4: Concurrent per-employee processing ─────────────────────
+    lock = threading.Lock()
+    employee_summaries: List[Dict[str, Any]] = []
 
-        try:
-            # Step 2: Math Agent — compute ranking
-            logger.info("  Step 2: Math Agent")
-            math_agent.compute_ranking(emp)
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        futures = {
+            pool.submit(_process_employee, emp, i, len(employees)): emp
+            for i, emp in enumerate(employees, 1)
+        }
 
-            # Step 3: GitHub Agent — collect data, AI score, ROI
-            logger.info("  Step 3: GitHub Agent")
-            github_agent.run(emp)
+        for future in as_completed(futures):
+            summary = future.result()  # _process_employee never raises
+            with lock:
+                employee_summaries.append(summary)
+                if summary["status"] == "success":
+                    results["processed"] += 1
+                else:
+                    results["failed"] += 1
 
-            # Step 4: Update Agent — write to DB (waits for success)
-            logger.info("  Step 4: Update Agent")
-            update_agent.run(emp)
-
-            emp["pipeline_status"] = "success"
-            results["processed"] += 1
-            logger.info("  ✓ %s done (ranking=%.4f, roi=%.4f)",
-                        name,
-                        emp.get("ranking", 0),
-                        emp.get("roi", 0))
-
-        except Exception as exc:
-            logger.error("  ✗ %s FAILED: %s", name, exc)
-            emp["pipeline_status"] = f"failed: {exc}"
-            results["failed"] += 1
-
-        # Add summary to results (strip large data for response)
-        results["employees"].append({
-            "id": emp.get("id"),
-            "name": name,
-            "ranking": emp.get("ranking"),
-            "roi": emp.get("roi"),
-            "github_score": emp.get("github_score"),
-            "verdict": emp.get("_math_details", {}).get("verdict"),
-            "pipeline_status": emp.get("pipeline_status"),
-        })
-
+    results["employees"] = employee_summaries
     elapsed = round(time.time() - t0, 2)
     results["status"] = "completed"
     results["elapsed_seconds"] = elapsed

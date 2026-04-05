@@ -28,7 +28,7 @@ def run() -> List[Dict[str, Any]]:
             "id": str(r.get("id", "")),
             "name": r.get("name", ""),
             "level": r.get("level"),
-            "apr": r.get("apr"),            # jsonb — dict like {"2024": 3.5, "2023": 4.0}
+            "apr": r.get("apr") or r.get(" apr"),  # DB column has leading space
             "pip": r.get("pip", 0),
             "gh_username": r.get("gh_username"),
             "joiningdate": r.get("joiningdate", ""),

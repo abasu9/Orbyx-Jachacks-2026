@@ -10,6 +10,7 @@ If there is no gh_username → github_score is skipped and ROI is
 calculated from ranking + tenure only.
 """
 
+import asyncio
 import json
 import logging
 import os
@@ -27,9 +28,9 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 GITHUB_PAT = os.getenv("GITHUB_PAT", "")
 
-MAX_REPOS = 10
-MAX_COMMITS_PER_REPO = 20
-MAX_PRS = 30
+MAX_REPOS = 5
+MAX_COMMITS_PER_REPO = 5
+MAX_PRS = 10
 
 # ROI weights
 RANKING_WEIGHT = 0.9       # 90% from performance ranking
@@ -45,79 +46,81 @@ def _gh_headers() -> Dict[str, str]:
     return h
 
 
-def _fetch_user_profile(username: str) -> Dict:
+async def _async_get(client: httpx.AsyncClient, url: str, **kwargs) -> Any:
+    """Async GET wrapper that returns parsed JSON or fallback."""
     try:
-        r = httpx.get(f"{GITHUB_API}/users/{username}", headers=_gh_headers(), timeout=15)
+        r = await client.get(url, headers=_gh_headers(), timeout=10, **kwargs)
         r.raise_for_status()
         return r.json()
     except httpx.HTTPError:
-        return {}
+        return None
 
 
-def _fetch_repos(username: str) -> List[Dict]:
+def _collect_github_data(username: str) -> Dict[str, Any]:
+    """Collect GitHub data with parallel HTTP calls for speed."""
     try:
-        r = httpx.get(
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        loop = None
+
+    if loop and loop.is_running():
+        # Already inside an async context (uvicorn) — use nest_asyncio or thread
+        import concurrent.futures
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            return pool.submit(asyncio.run, _collect_github_data_async(username)).result()
+    else:
+        return asyncio.run(_collect_github_data_async(username))
+
+
+async def _collect_github_data_async(username: str) -> Dict[str, Any]:
+    async with httpx.AsyncClient() as client:
+        # Phase 1: fetch profile, repos, PRs in parallel
+        profile_task = _async_get(client, f"{GITHUB_API}/users/{username}")
+        repos_task = _async_get(
+            client,
             f"{GITHUB_API}/users/{username}/repos",
-            headers=_gh_headers(),
             params={"sort": "pushed", "per_page": MAX_REPOS},
-            timeout=15,
         )
-        r.raise_for_status()
-        return r.json()
-    except httpx.HTTPError:
-        return []
-
-
-def _fetch_commits(owner: str, repo: str, author: str) -> List[Dict]:
-    try:
-        r = httpx.get(
-            f"{GITHUB_API}/repos/{owner}/{repo}/commits",
-            headers=_gh_headers(),
-            params={"author": author, "per_page": MAX_COMMITS_PER_REPO},
-            timeout=15,
-        )
-        r.raise_for_status()
-        return r.json()
-    except httpx.HTTPError:
-        return []
-
-
-def _fetch_prs(username: str) -> List[Dict]:
-    """Fetch recent PRs authored by the user across all repos."""
-    try:
-        r = httpx.get(
+        prs_task = _async_get(
+            client,
             f"{GITHUB_API}/search/issues",
-            headers=_gh_headers(),
             params={
                 "q": f"author:{username} type:pr",
                 "sort": "created",
                 "order": "desc",
                 "per_page": MAX_PRS,
             },
-            timeout=15,
         )
-        r.raise_for_status()
-        data = r.json()
-        return data.get("items", [])
-    except httpx.HTTPError:
-        return []
 
+        profile, repos_raw, prs_raw = await asyncio.gather(
+            profile_task, repos_task, prs_task
+        )
 
-def _collect_github_data(username: str) -> Dict[str, Any]:
-    """Collect all relevant GitHub data for a user into a structured dict."""
-    profile = _fetch_user_profile(username)
-    repos = _fetch_repos(username)
-    prs = _fetch_prs(username)
+        profile = profile or {}
+        repos = repos_raw if isinstance(repos_raw, list) else []
+        prs = (prs_raw or {}).get("items", []) if isinstance(prs_raw, dict) else []
+
+        # Phase 2: fetch commits for all repos in parallel
+        async def _get_commits(repo_data):
+            owner = repo_data["owner"]["login"]
+            name = repo_data["name"]
+            data = await _async_get(
+                client,
+                f"{GITHUB_API}/repos/{owner}/{name}/commits",
+                params={"author": username, "per_page": MAX_COMMITS_PER_REPO},
+            )
+            return repo_data, data if isinstance(data, list) else []
+
+        commit_results = await asyncio.gather(
+            *[_get_commits(r) for r in repos]
+        )
 
     total_commits = 0
     repo_summaries = []
-    for repo_data in repos:
-        repo_name = repo_data["name"]
-        owner = repo_data["owner"]["login"]
-        commits = _fetch_commits(owner, repo_name, username)
+    for repo_data, commits in commit_results:
         total_commits += len(commits)
         repo_summaries.append({
-            "name": f"{owner}/{repo_name}",
+            "name": f"{repo_data['owner']['login']}/{repo_data['name']}",
             "language": repo_data.get("language"),
             "description": repo_data.get("description", ""),
             "stars": repo_data.get("stargazers_count", 0),

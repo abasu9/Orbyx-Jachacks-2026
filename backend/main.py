@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from routes import pipeline
 from agents.orchestrator import run_pipeline
+from insforge_client import list_rows
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(message)s")
 
@@ -38,6 +39,20 @@ def handle():
         tb = traceback.format_exc()
         logging.error("Pipeline error:\n%s", tb)
         return JSONResponse(status_code=500, content={"error": str(exc), "traceback": tb})
+
+
+@app.get("/employees")
+def get_employees():
+    """Fetch all employees from InsForge DB for the analytics page."""
+    try:
+        rows = list_rows("users")
+        # Normalize the " apr" key (DB column has a leading space)
+        for row in rows:
+            if " apr" in row:
+                row["apr"] = row.pop(" apr")
+        return rows
+    except Exception as exc:
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
 
 app.include_router(pipeline.router, prefix="/pipeline", tags=["pipeline"])

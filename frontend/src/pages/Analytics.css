@@ -1,0 +1,222 @@
+/* ── Analytics Page ──────────────────────────────────────── */
+
+.analytics-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-nav {
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--primary);
+  background: rgba(238, 79, 53, 0.08);
+  border: 1px solid rgba(238, 79, 53, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-nav:hover {
+  background: rgba(238, 79, 53, 0.15);
+}
+
+/* Main */
+.an-main {
+  flex: 1;
+  padding: 24px 32px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Toolbar */
+.an-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.an-search {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.an-search::placeholder {
+  color: var(--text-dim);
+}
+
+.an-search:focus {
+  border-color: var(--primary);
+}
+
+.btn-refresh {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.btn-refresh:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.btn-refresh:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.an-error {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  color: #fca5a5;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* Heatmap */
+.heatmap-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.heatmap-title {
+  margin: 0 0 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.heatmap-chart-wrap {
+  position: relative;
+  height: 340px;
+}
+
+/* Table */
+.an-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.an-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.an-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.an-table th.sortable {
+  cursor: pointer;
+}
+
+.an-table th.sortable:hover {
+  color: var(--text);
+}
+
+.sort-arrow {
+  font-size: 11px;
+  color: var(--primary);
+}
+
+.an-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.an-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.an-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.td-name {
+  font-weight: 500;
+}
+
+.td-gh {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.an-loading,
+.an-empty {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 32px 14px !important;
+}
+
+/* Pagination */
+.an-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.an-pagination button {
+  padding: 8px 18px;
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.an-pagination button:hover:not(:disabled) {
+  border-color: var(--primary);
+}
+
+.an-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 13px;
+  color: var(--text-muted);
+}

@@ -1,0 +1,35 @@
+/* ── Reset & Global ─────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #ee4f35;
+  --primary-hover: #d94530;
+  --primary-glow: rgba(238, 79, 53, 0.35);
+  --bg: #121212;
+  --bg-card: #1a1a1a;
+  --bg-input: #222222;
+  --border: #2a2a2a;
+  --border-focus: #ee4f35;
+  --text: #fafafa;
+  --text-muted: #888888;
+  --text-dim: #666666;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
