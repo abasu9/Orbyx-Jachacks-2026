@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from routes import pipeline
 from agents.orchestrator import run_pipeline
+from agents import summarize_agent
 from insforge_client import list_rows
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(message)s")
@@ -52,6 +53,20 @@ def get_employees():
                 row["apr"] = row.pop(" apr")
         return rows
     except Exception as exc:
+        return JSONResponse(status_code=500, content={"error": str(exc)})
+
+
+@app.post("/summarize/{employee_id}")
+def summarize(employee_id: str):
+    """Generate a GitHub summary report for a single employee."""
+    try:
+        report = summarize_agent.run(employee_id)
+        return report
+    except ValueError as exc:
+        return JSONResponse(status_code=404, content={"error": str(exc)})
+    except Exception as exc:
+        tb = traceback.format_exc()
+        logging.error("Summarize error:\n%s", tb)
         return JSONResponse(status_code=500, content={"error": str(exc)})
 
 

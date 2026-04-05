@@ -43,6 +43,8 @@ export default function Analytics() {
   const [sortKey, setSortKey] = useState('name')
   const [sortDir, setSortDir] = useState('asc')
   const [page, setPage] = useState(1)
+  const [summarizing, setSummarizing] = useState(null)  // employee id being summarized
+  const [report, setReport] = useState(null)             // report to show in modal
 
   useEffect(() => {
     if (!sessionStorage.getItem('cull_auth')) {
@@ -115,6 +117,23 @@ export default function Analytics() {
   function handleLogout() {
     sessionStorage.removeItem('cull_auth')
     navigate('/login')
+  }
+
+  async function handleSummarize(emp) {
+    setSummarizing(emp.id)
+    try {
+      const resp = await fetch(`/api/summarize/${emp.id}`, { method: 'POST' })
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}))
+        throw new Error(err.error || `Error ${resp.status}`)
+      }
+      const data = await resp.json()
+      setReport({ name: emp.name, ...data })
+    } catch (err) {
+      setReport({ name: emp.name, error: err.message })
+    } finally {
+      setSummarizing(null)
+    }
   }
 
   // ── Heatmap: Ranking (x) vs ROI (y) ──────────────────────
@@ -252,13 +271,14 @@ export default function Analytics() {
                     )}
                   </th>
                 ))}
+                <th className="th-action">Report</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={COLUMNS.length} className="an-loading">Loading employees...</td></tr>
+                <tr><td colSpan={COLUMNS.length + 1} className="an-loading">Loading employees...</td></tr>
               ) : paged.length === 0 ? (
-                <tr><td colSpan={COLUMNS.length} className="an-empty">No employees found.</td></tr>
+                <tr><td colSpan={COLUMNS.length + 1} className="an-empty">No employees found.</td></tr>
               ) : paged.map(emp => (
                 <tr key={emp.id}>
                   <td className="td-name">{emp.name}</td>
@@ -269,6 +289,26 @@ export default function Analytics() {
                   <td>{emp.roi != null ? emp.roi.toFixed(4) : '—'}</td>
                   <td className="td-gh">{emp.gh_username || '—'}</td>
                   <td>{emp.joiningdate || '—'}</td>
+                  <td className="td-action">
+                    <button
+                      className="btn-summarize"
+                      title="Generate report"
+                      disabled={summarizing === emp.id}
+                      onClick={() => handleSummarize(emp)}
+                    >
+                      {summarizing === emp.id ? (
+                        <span className="spin-icon">⟳</span>
+                      ) : (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                          <line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                          <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                      )}
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -284,6 +324,102 @@ export default function Analytics() {
           </div>
         )}
       </main>
+
+      {/* Report Modal */}
+      {report && (
+        <div className="modal-overlay" onClick={() => setReport(null)}>
+          <div className="modal-card" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{report.name} — Evaluation Report</h3>
+              <button className="modal-close" onClick={() => setReport(null)}>✕</button>
+            </div>
+            <div className="modal-body">
+              {report.error ? (
+                <div className="an-error">{report.error}</div>
+              ) : report.evaluation ? (
+                <>
+                  <section className="rpt-section">
+                    <h4>Summary</h4>
+                    <p>{report.evaluation.summary}</p>
+                  </section>
+
+                  <section className="rpt-section">
+                    <h4>Impact Assessment</h4>
+                    <span className={`rpt-badge rpt-${report.evaluation.impact_assessment?.level}`}>
+                      {report.evaluation.impact_assessment?.level}
+                    </span>
+                    <p>{report.evaluation.impact_assessment?.justification}</p>
+                  </section>
+
+                  <section className="rpt-section">
+                    <h4>Code Quality</h4>
+                    <p>{report.evaluation.code_quality_signals?.assessment}</p>
+                    {report.evaluation.code_quality_signals?.risk_flags?.length > 0 && (
+                      <ul className="rpt-list">
+                        {report.evaluation.code_quality_signals.risk_flags.map((f, i) => <li key={i}>{f}</li>)}
+                      </ul>
+                    )}
+                  </section>
+
+                  <section className="rpt-section">
+                    <h4>Collaboration</h4>
+                    <span className={`rpt-badge rpt-${report.evaluation.collaboration?.review_strength}`}>
+                      {report.evaluation.collaboration?.review_strength}
+                    </span>
+                    <p>{report.evaluation.collaboration?.assessment}</p>
+                  </section>
+
+                  <section className="rpt-section">
+                    <h4>Consistency</h4>
+                    <span className="rpt-badge rpt-neutral">{report.evaluation.consistency?.pattern}</span>
+                    <p>{report.evaluation.consistency?.assessment}</p>
+                  </section>
+
+                  <section className="rpt-section">
+                    <h4>Seniority Signal</h4>
+                    <span className="rpt-badge rpt-neutral">
+                      {report.evaluation.seniority_signal?.level}
+                      {report.evaluation.seniority_signal?.confidence != null &&
+                        ` (${(report.evaluation.seniority_signal.confidence * 100).toFixed(0)}% confidence)`}
+                    </span>
+                  </section>
+
+                  <div className="rpt-cols">
+                    <section className="rpt-section">
+                      <h4>Strengths</h4>
+                      <ul className="rpt-list rpt-strengths">
+                        {(report.evaluation.strengths || []).map((s, i) => <li key={i}>{s}</li>)}
+                      </ul>
+                    </section>
+                    <section className="rpt-section">
+                      <h4>Weaknesses</h4>
+                      <ul className="rpt-list rpt-weaknesses">
+                        {(report.evaluation.weaknesses || []).map((w, i) => <li key={i}>{w}</li>)}
+                      </ul>
+                    </section>
+                  </div>
+
+                  {report.github_metrics && (
+                    <section className="rpt-section rpt-metrics">
+                      <h4>GitHub Metrics</h4>
+                      <div className="rpt-metric-grid">
+                        {Object.entries(report.github_metrics).map(([k, v]) => (
+                          <div key={k} className="rpt-metric">
+                            <span className="rpt-metric-label">{k.replace(/_/g, ' ')}</span>
+                            <span className="rpt-metric-value">{Array.isArray(v) ? v.join(', ') : v}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </>
+              ) : (
+                <p className="an-empty">No evaluation data.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
