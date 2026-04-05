@@ -1,0 +1,6 @@
+employee_id,employee_name,AP,pip_count,ap_normalized,pip_penalty,ranking_score,rank
+1,Abhishek Basu,1.84,0,0.92,0.0,0.93,1
+2,Anand Singh,0.9,0,0.45,0.0,0.53,2
+3,Bhavani Shankar,0.9,0,0.45,0.0,0.53,3
+4,Soureesh Dalal,0.9,0,0.45,0.0,0.53,4
+5,Vinayak Baghel,0.9,0,0.45,0.0,0.53,5

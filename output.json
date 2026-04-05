@@ -1,0 +1,54 @@
+{
+  "Vinayak Baghel": {
+    "total_commits": 273,
+    "repos_contributed_to": 2,
+    "active_days": 171,
+    "last_commit_date": "2026-04-05T03:47:57+00:00",
+    "commits_per_repo": {
+      "orbyx-backend": 194,
+      "orbyx-ml": 79
+    }
+  },
+  "Anand Singh": {
+    "total_commits": 281,
+    "repos_contributed_to": 2,
+    "active_days": 160,
+    "last_commit_date": "2026-04-05T02:37:42+00:00",
+    "commits_per_repo": {
+      "orbyx-backend": 192,
+      "orbyx-ml": 89
+    }
+  },
+  "Abhishek Basu": {
+    "total_commits": 357,
+    "repos_contributed_to": 4,
+    "active_days": 205,
+    "last_commit_date": "2026-04-05T01:48:27+00:00",
+    "commits_per_repo": {
+      "orbyx-backend": 194,
+      "orbyx-frontend": 91,
+      "orbyx-data": 1,
+      "orbyx-ml": 71
+    }
+  },
+  "Soureesh Dalal": {
+    "total_commits": 293,
+    "repos_contributed_to": 2,
+    "active_days": 165,
+    "last_commit_date": "2026-04-05T02:37:21+00:00",
+    "commits_per_repo": {
+      "orbyx-backend": 203,
+      "orbyx-ml": 90
+    }
+  },
+  "Bhavani Shankar": {
+    "total_commits": 299,
+    "repos_contributed_to": 2,
+    "active_days": 159,
+    "last_commit_date": "2026-04-05T02:38:12+00:00",
+    "commits_per_repo": {
+      "orbyx-backend": 206,
+      "orbyx-ml": 93
+    }
+  }
+}

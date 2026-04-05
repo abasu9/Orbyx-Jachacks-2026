@@ -1,0 +1,224 @@
+{
+  "Soureesh Dalal": {
+    "commit_metrics": {
+      "total_commits": 293,
+      "repos_contributed_to": 2,
+      "active_days": 165,
+      "last_commit_date": "2026-04-05T02:37:21+00:00",
+      "commits_per_repo": {
+        "orbyx-backend": 203,
+        "orbyx-ml": 90
+      }
+    },
+    "pr_metrics": {
+      "prs_opened": 0,
+      "prs_merged": 0,
+      "prs_closed_unmerged": 0,
+      "draft_prs": 0,
+      "repos_with_prs": 0,
+      "avg_pr_additions": 0,
+      "avg_pr_deletions": 0,
+      "avg_pr_changed_files": 0,
+      "avg_pr_comments": 0,
+      "avg_pr_review_comments": 0,
+      "avg_pr_merge_time_hours": 0,
+      "last_pr_date": null
+    },
+    "review_metrics": {
+      "reviews_given": 0,
+      "approvals_given": 0,
+      "change_requests_given": 0,
+      "review_comments_left": 0,
+      "unique_prs_reviewed": 0,
+      "unique_repos_reviewed": 0,
+      "last_review_date": null
+    },
+    "derived_metrics": {
+      "total_contribution_repos": 2,
+      "pr_merge_rate": 0,
+      "pr_close_rate": 0,
+      "review_approval_rate": 0,
+      "review_change_request_rate": 0,
+      "commit_to_pr_ratio": 293,
+      "activity_score_proxy": 293
+    }
+  },
+  "Bhavani Shankar": {
+    "commit_metrics": {
+      "total_commits": 299,
+      "repos_contributed_to": 2,
+      "active_days": 159,
+      "last_commit_date": "2026-04-05T02:38:12+00:00",
+      "commits_per_repo": {
+        "orbyx-backend": 206,
+        "orbyx-ml": 93
+      }
+    },
+    "pr_metrics": {
+      "prs_opened": 0,
+      "prs_merged": 0,
+      "prs_closed_unmerged": 0,
+      "draft_prs": 0,
+      "repos_with_prs": 0,
+      "avg_pr_additions": 0,
+      "avg_pr_deletions": 0,
+      "avg_pr_changed_files": 0,
+      "avg_pr_comments": 0,
+      "avg_pr_review_comments": 0,
+      "avg_pr_merge_time_hours": 0,
+      "last_pr_date": null
+    },
+    "review_metrics": {
+      "reviews_given": 0,
+      "approvals_given": 0,
+      "change_requests_given": 0,
+      "review_comments_left": 0,
+      "unique_prs_reviewed": 0,
+      "unique_repos_reviewed": 0,
+      "last_review_date": null
+    },
+    "derived_metrics": {
+      "total_contribution_repos": 2,
+      "pr_merge_rate": 0,
+      "pr_close_rate": 0,
+      "review_approval_rate": 0,
+      "review_change_request_rate": 0,
+      "commit_to_pr_ratio": 299,
+      "activity_score_proxy": 299
+    }
+  },
+  "Vinayak Baghel": {
+    "commit_metrics": {
+      "total_commits": 273,
+      "repos_contributed_to": 2,
+      "active_days": 171,
+      "last_commit_date": "2026-04-05T03:47:57+00:00",
+      "commits_per_repo": {
+        "orbyx-backend": 194,
+        "orbyx-ml": 79
+      }
+    },
+    "pr_metrics": {
+      "prs_opened": 0,
+      "prs_merged": 0,
+      "prs_closed_unmerged": 0,
+      "draft_prs": 0,
+      "repos_with_prs": 0,
+      "avg_pr_additions": 0,
+      "avg_pr_deletions": 0,
+      "avg_pr_changed_files": 0,
+      "avg_pr_comments": 0,
+      "avg_pr_review_comments": 0,
+      "avg_pr_merge_time_hours": 0,
+      "last_pr_date": null
+    },
+    "review_metrics": {
+      "reviews_given": 0,
+      "approvals_given": 0,
+      "change_requests_given": 0,
+      "review_comments_left": 0,
+      "unique_prs_reviewed": 0,
+      "unique_repos_reviewed": 0,
+      "last_review_date": null
+    },
+    "derived_metrics": {
+      "total_contribution_repos": 2,
+      "pr_merge_rate": 0,
+      "pr_close_rate": 0,
+      "review_approval_rate": 0,
+      "review_change_request_rate": 0,
+      "commit_to_pr_ratio": 273,
+      "activity_score_proxy": 273
+    }
+  },
+  "Anand Singh": {
+    "commit_metrics": {
+      "total_commits": 281,
+      "repos_contributed_to": 2,
+      "active_days": 160,
+      "last_commit_date": "2026-04-05T02:37:42+00:00",
+      "commits_per_repo": {
+        "orbyx-backend": 192,
+        "orbyx-ml": 89
+      }
+    },
+    "pr_metrics": {
+      "prs_opened": 0,
+      "prs_merged": 0,
+      "prs_closed_unmerged": 0,
+      "draft_prs": 0,
+      "repos_with_prs": 0,
+      "avg_pr_additions": 0,
+      "avg_pr_deletions": 0,
+      "avg_pr_changed_files": 0,
+      "avg_pr_comments": 0,
+      "avg_pr_review_comments": 0,
+      "avg_pr_merge_time_hours": 0,
+      "last_pr_date": null
+    },
+    "review_metrics": {
+      "reviews_given": 0,
+      "approvals_given": 0,
+      "change_requests_given": 0,
+      "review_comments_left": 0,
+      "unique_prs_reviewed": 0,
+      "unique_repos_reviewed": 0,
+      "last_review_date": null
+    },
+    "derived_metrics": {
+      "total_contribution_repos": 2,
+      "pr_merge_rate": 0,
+      "pr_close_rate": 0,
+      "review_approval_rate": 0,
+      "review_change_request_rate": 0,
+      "commit_to_pr_ratio": 281,
+      "activity_score_proxy": 281
+    }
+  },
+  "Abhishek Basu": {
+    "commit_metrics": {
+      "total_commits": 357,
+      "repos_contributed_to": 4,
+      "active_days": 205,
+      "last_commit_date": "2026-04-05T01:48:27+00:00",
+      "commits_per_repo": {
+        "orbyx-backend": 194,
+        "orbyx-frontend": 91,
+        "orbyx-data": 1,
+        "orbyx-ml": 71
+      }
+    },
+    "pr_metrics": {
+      "prs_opened": 35,
+      "prs_merged": 9,
+      "prs_closed_unmerged": 1,
+      "draft_prs": 0,
+      "repos_with_prs": 3,
+      "avg_pr_additions": 0,
+      "avg_pr_deletions": 0,
+      "avg_pr_changed_files": 0,
+      "avg_pr_comments": 0,
+      "avg_pr_review_comments": 0,
+      "avg_pr_merge_time_hours": 1.08,
+      "last_pr_date": "2026-04-05T02:42:02+00:00"
+    },
+    "review_metrics": {
+      "reviews_given": 60,
+      "approvals_given": 0,
+      "change_requests_given": 0,
+      "review_comments_left": 60,
+      "unique_prs_reviewed": 33,
+      "unique_repos_reviewed": 3,
+      "last_review_date": "2026-04-05T02:42:12+00:00"
+    },
+    "derived_metrics": {
+      "total_contribution_repos": 4,
+      "pr_merge_rate": 0.26,
+      "pr_close_rate": 0.29,
+      "review_approval_rate": 0.0,
+      "review_change_request_rate": 0.0,
+      "commit_to_pr_ratio": 10.2,
+      "activity_score_proxy": 452
+    }
+  }
+}

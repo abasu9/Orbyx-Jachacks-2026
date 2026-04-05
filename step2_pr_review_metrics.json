@@ -1,0 +1,27 @@
+{
+  "Abhishek Basu": {
+    "pr_metrics": {
+      "prs_opened": 35,
+      "prs_merged": 9,
+      "prs_closed_unmerged": 1,
+      "draft_prs": 0,
+      "repos_with_prs": 3,
+      "avg_pr_additions": 0,
+      "avg_pr_deletions": 0,
+      "avg_pr_changed_files": 0,
+      "avg_pr_comments": 0,
+      "avg_pr_review_comments": 0,
+      "avg_pr_merge_time_hours": 1.08,
+      "last_pr_date": "2026-04-05T02:42:02+00:00"
+    },
+    "review_metrics": {
+      "reviews_given": 60,
+      "approvals_given": 0,
+      "change_requests_given": 0,
+      "review_comments_left": 60,
+      "unique_prs_reviewed": 33,
+      "unique_repos_reviewed": 3,
+      "last_review_date": "2026-04-05T02:42:12+00:00"
+    }
+  }
+}
