@@ -72,6 +72,8 @@ def run(employee: Dict[str, Any]) -> Dict[str, Any]:
         patch_data["ranking"] = employee["ranking"]
     if employee.get("roi") is not None:
         patch_data["roi"] = employee["roi"]
+    if employee.get("report_id") is not None:
+        patch_data["report_id"] = employee["report_id"]
 
     if patch_data:
         try:

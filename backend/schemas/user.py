@@ -12,6 +12,7 @@ class UserBase(BaseModel):
     gh_username: Optional[str] = None
     ranking: Optional[float] = None
     roi: Optional[float] = None
+    report_id: Optional[str] = None
 
 class UserCreate(BaseModel):
     name: str
@@ -30,6 +31,7 @@ class UserUpdate(BaseModel):
     gh_username: Optional[str] = None
     ranking: Optional[float] = None
     roi: Optional[float] = None
+    report_id: Optional[str] = None
 
 class User(UserBase):
     id: UUID

@@ -7,5 +7,6 @@ CREATE TABLE users (
     joiningdate DATE NOT NULL,
     gh_username TEXT,
     ranking FLOAT8,
-    roi FLOAT8 CHECK (roi >= 0)
+    roi FLOAT8 CHECK (roi >= 0),
+    report_id TEXT
 );

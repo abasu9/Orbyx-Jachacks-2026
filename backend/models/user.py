@@ -19,3 +19,4 @@ class User(Base):
     gh_username = Column(Text, nullable=True)
     ranking = Column(Float, nullable=True)
     roi = Column(Float, nullable=True)
+    report_id = Column(Text, nullable=True)

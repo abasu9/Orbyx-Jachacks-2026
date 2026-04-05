@@ -34,6 +34,7 @@ def run() -> List[Dict[str, Any]]:
             "joiningdate": r.get("joiningdate", ""),
             "roi": r.get("roi"),
             "ranking": r.get("ranking"),
+            "report_id": r.get("report_id"),
         })
 
     logger.info("[DataAgent] Fetched %d employees.", len(employees))
