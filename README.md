@@ -2,7 +2,7 @@
   <img src="frontend/public/cull-log.jpeg" alt="CULL Logo" width="120" />
 </p>
 
-<h1 align="center">CULL — Agentic AI for Employee Analytics</h1>
+<h1 align="center">CULL - Agentic AI for Employee Analytics</h1>
 
 <p align="center">
   <strong>A social-impact AI platform that evaluates, ranks, and uplifts employee performance using autonomous agents and graph-based pipeline traversal.</strong>
