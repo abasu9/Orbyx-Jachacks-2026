@@ -34,16 +34,16 @@ Organizations struggle to objectively evaluate employee performance. Manual revi
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        CULL Frontend                            │
-│              React + Vite + Chart.js                            │
-│   ┌──────────┐  ┌───────────┐  ┌────────────────────────┐       │
-│   │  Login   │  │ Dashboard │  │      Analytics         │       │
-│   │          │  │ (Trigger) │  │ Heatmap + Table + Modal│       │
-│   └──────────┘  └─────┬─────┘  └───────────┬────────────┘       │
-└────────────────────────┼────────────────────┼───────────────────┘
-                         │ POST /handle       │ POST /summarize/{id}
-                         ▼                    ▼
+┌────────────────────────────────────────────────────────────────┐
+│                        CULL Frontend                           │
+│                    React + Vite + Chart.js                     │
+│   ┌──────────┐  ┌───────────┐  ┌────────────────────────┐      │
+│   │  Login   │  │ Dashboard │  │      Analytics         │      │
+│   │          │  │ (Trigger) │  │ Heatmap + Table + Modal│      │
+│   └──────────┘  └─────┬─────┘  └───────────┬────────────┘      │
+└───────────────────────┼────────────────────┼───────────────────┘
+                        │ POST /handle       │ POST /summarize/{id}
+                        ▼                    ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                     FastAPI Backend                             │
 │                                                                 │
@@ -52,7 +52,7 @@ Organizations struggle to objectively evaluate employee performance. Manual revi
 │  │   ┌─────────────┐                                      │     │
 │  │   │ Data Agent  │── fetch all employees ──┐            │     │
 │  │   └─────────────┘                         │            │     │
-│  │                                            ▼           │     │
+│  │                                           ▼            │     │
 │  │                              ┌─── ThreadPool (10)───┐  │     │
 │  │                              │                      │  │     │
 │  │                              │  ┌──────────────┐    │  │     │
@@ -75,9 +75,9 @@ Organizations struggle to objectively evaluate employee performance. Manual revi
 │  └────────────────────────────────────────────────────────┘     │
 │                                                                 │
 │  ┌─────────────────┐                                            │
-│  │ Summarize Agent  │── on-demand per employee                  │
-│  │ (GitHub Metrics  │                                           │
-│  │  + AI Eval)      │                                           │
+│  │ Summarize Agent │── on-demand per employee                   │
+│  │ (GitHub Metrics │                                            │
+│  │  + AI Eval)     │                                            │
 │  └─────────────────┘                                            │
 └──────────────────────────────┬──────────────────────────────────┘
                                │
