@@ -37,37 +37,37 @@ Organizations struggle to objectively evaluate employee performance. Manual revi
 ┌─────────────────────────────────────────────────────────────────┐
 │                        CULL Frontend                            │
 │              React + Vite + Chart.js                            │
-│   ┌──────────┐  ┌───────────┐  ┌────────────────────────┐      │
-│   │  Login   │  │ Dashboard │  │      Analytics          │      │
-│   │          │  │ (Trigger) │  │ Heatmap + Table + Modal │      │
-│   └──────────┘  └─────┬─────┘  └───────────┬────────────┘      │
+│   ┌──────────┐  ┌───────────┐  ┌────────────────────────┐       │
+│   │  Login   │  │ Dashboard │  │      Analytics         │       │
+│   │          │  │ (Trigger) │  │ Heatmap + Table + Modal│       │
+│   └──────────┘  └─────┬─────┘  └───────────┬────────────┘       │
 └────────────────────────┼────────────────────┼───────────────────┘
                          │ POST /handle       │ POST /summarize/{id}
                          ▼                    ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     FastAPI Backend                              │
+│                     FastAPI Backend                             │
 │                                                                 │
 │  ┌──────────────── Agent Pipeline (DAG) ──────────────────┐     │
 │  │                                                        │     │
 │  │   ┌─────────────┐                                      │     │
-│  │   │ Data Agent   │── fetch all employees ──┐            │     │
-│  │   └─────────────┘                          │            │     │
-│  │                                            ▼            │     │
-│  │                              ┌─── ThreadPool (10) ───┐  │     │
-│  │                              │                       │  │     │
-│  │                              │  ┌──────────────┐     │  │     │
-│  │                              │  │  Math Agent   │    │  │     │
-│  │                              │  │  (Ranking)    │    │  │     │
+│  │   │ Data Agent  │── fetch all employees ──┐            │     │
+│  │   └─────────────┘                         │            │     │
+│  │                                            ▼           │     │
+│  │                              ┌─── ThreadPool (10)───┐  │     │
+│  │                              │                      │  │     │
+│  │                              │  ┌──────────────┐    │  │     │
+│  │                              │  │  Math Agent  │    │  │     │
+│  │                              │  │  (Ranking)   │    │  │     │
 │  │                              │  └──────┬───────┘    │  │     │
 │  │                              │         ▼            │  │     │
 │  │                              │  ┌──────────────┐    │  │     │
-│  │                              │  │ GitHub Agent  │    │  │     │
-│  │                              │  │ + AI Scoring  │    │  │     │
+│  │                              │  │ GitHub Agent │    │  │     │
+│  │                              │  │ + AI Scoring │    │  │     │
 │  │                              │  └──────┬───────┘    │  │     │
 │  │                              │         ▼            │  │     │
 │  │                              │  ┌──────────────┐    │  │     │
-│  │                              │  │ Update Agent  │    │  │     │
-│  │                              │  │ (DB Write)    │    │  │     │
+│  │                              │  │ Update Agent │    │  │     │
+│  │                              │  │ (DB Write)   │    │  │     │
 │  │                              │  └──────────────┘    │  │     │
 │  │                              │                      │  │     │
 │  │                              │  × 46 employees      │  │     │
@@ -84,8 +84,8 @@ Organizations struggle to objectively evaluate employee performance. Manual revi
                     ┌──────────┴──────────┐
                     ▼                     ▼
            ┌──────────────┐     ┌─────────────────┐
-           │  InsForge DB  │     │  GitHub REST API │
-           │  (PostgreSQL) │     │  + OpenAI API    │
+           │  InsForge DB │     │ GitHub REST API │
+           │  (PostgreSQL)│     │  + OpenAI API   │
            └──────────────┘     └─────────────────┘
 ```
 
